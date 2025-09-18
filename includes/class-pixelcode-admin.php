@@ -18,25 +18,65 @@ class Pixelcode_Admin {
      * Add submenu under WooCommerce Products menu
      */
     public function add_wc_submenu() {
+        // Condition submenu
         add_submenu_page(
             'edit.php?post_type=product',      
-            'Sell Your Phone',                  
-            'Sell Your Phone',                 
+            'Condition',                        
+            'Condition',                        
             'manage_woocommerce',               
-            'pixelcode-sell-your-phone',       
-            array( $this, 'render_sell_phone_page' ) 
+            'pixelcode-condition',             
+            array( $this, 'render_condition_page' ) 
+        );
+
+        // Carrier submenu
+        add_submenu_page(
+            'edit.php?post_type=product',      
+            'Carrier',                          
+            'Carrier',                          
+            'manage_woocommerce',               
+            'pixelcode-carrier',               
+            array( $this, 'render_carrier_page' ) 
+        );
+
+        // Storage submenu
+        add_submenu_page(
+            'edit.php?post_type=product',      
+            'Storage',                          
+            'Storage',                          
+            'manage_woocommerce',               
+            'pixelcode-storage',               
+            array( $this, 'render_storage_page' ) 
         );
     }
 
-    /**
-     * Callback function for page content
-     */
-    public function render_sell_phone_page() {
-        ?>
-        <div class="wrap">
-            <h1>Sell Your Phone Submissions</h1>
-            <p>Here you can manage phone resale requests and submissions.</p>
-        </div>
-        <?php
+
+    public function render_condition_page() {
+        $file = plugin_dir_path( __FILE__ ) . '../templates/condition.php';
+
+        if ( file_exists( $file ) ) {
+            include $file;
+        } else {
+            echo '<div class="wrap"><h1>Condition</h1><p>Template file not found.</p></div>';
+        }
+    }
+
+    public function render_carrier_page() {
+        $file = plugin_dir_path( __FILE__ ) . '../templates/carrier.php';
+
+        if ( file_exists( $file ) ) {
+            include $file;
+        } else {
+            echo '<div class="wrap"><h1>Condition</h1><p>Template file not found.</p></div>';
+        }
+    }
+
+    public function render_storage_page() {
+        $file = plugin_dir_path( __FILE__ ) . '../templates/storage.php';
+
+        if ( file_exists( $file ) ) {
+            include $file;
+        } else {
+            echo '<div class="wrap"><h1>Condition</h1><p>Template file not found.</p></div>';
+        }
     }
 }
