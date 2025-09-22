@@ -46,7 +46,7 @@ function pixelcode_add_tabs_content() {
         }
 
         // Get saved rows
-        $meta_key = "_pixelcode_{$type}_rows";
+        $meta_key    = "_pixelcode_{$type}_rows";
         $stored_data = get_post_meta( $post->ID, $meta_key, true );
         if ( ! is_array($stored_data) ) $stored_data = [];
 
@@ -58,10 +58,16 @@ function pixelcode_add_tabs_content() {
         echo "<button type='button' class='button add_{$type}_row'>Add " . ucfirst($type) . " Option</button>";
         echo "</div>";
 
-        // Table
-        echo "<table class='wp-list-table widefat striped pixelcode_{$type}_table'>";
-        echo "<thead><tr><th>" . ucfirst($type) . "</th><th>Price</th><th>Action</th></tr></thead><tbody>";
+        // Table Header
+        if ( $type === 'condition' ) {
+            echo "<table class='wp-list-table widefat striped pixelcode_{$type}_table'>";
+            echo "<thead><tr><th>Condition</th><th>Price</th><th>Action</th></tr></thead><tbody>";
+        } else {
+            echo "<table class='wp-list-table widefat striped pixelcode_{$type}_table'>";
+            echo "<thead><tr><th>" . ucfirst($type) . "</th><th>Price</th><th>Action</th></tr></thead><tbody>";
+        }
 
+        // Table Rows
         if ( ! empty($stored_data) ) {
             foreach ( $stored_data as $index => $row ) {
                 echo "<tr>";
@@ -71,7 +77,9 @@ function pixelcode_add_tabs_content() {
                     echo "<option value='{$id}' {$selected}>{$title}</option>";
                 }
                 echo "</select></td>";
-                echo "<td><input type='text' name='_pixelcode_{$type}_rows[{$index}][price]' value='" . esc_attr($row['price']) . "' /></td>";
+
+                echo "<td><input type='text' name='_pixelcode_{$type}_rows[{$index}][price]' value='" . esc_attr($row['price'] ?? '') . "' /></td>";
+
                 echo "<td><button type='button' class='button remove_{$type}_row'>Remove</button></td>";
                 echo "</tr>";
             }
@@ -82,47 +90,82 @@ function pixelcode_add_tabs_content() {
 
         // JS for dynamic rows
         ?>
-<script type="text/javascript">
-jQuery(function($) {
-    var rowIndex<?php echo $type; ?> = <?php echo count($stored_data); ?>;
+        <script type="text/javascript">
+        jQuery(function($) {
+            var rowIndex<?php echo $type; ?> = <?php echo count($stored_data); ?>;
 
-    $('.add_<?php echo $type; ?>_row').on('click', function() {
-        var row = '<tr>';
-        row += '<td><select name="_pixelcode_<?php echo $type; ?>_rows[' +
-            rowIndex<?php echo $type; ?> +
-            '][<?php echo $type; ?>]"><?php foreach ($options as $id => $title){ echo "<option value=\'$id\'>$title</option>"; } ?></select></td>';
-        row += '<td><input type="text" name="_pixelcode_<?php echo $type; ?>_rows[' +
-            rowIndex<?php echo $type; ?> + '][price]" value="" /></td>';
-        row +=
-            '<td><button type="button" class="button remove_<?php echo $type; ?>_row">Remove</button></td>';
-        row += '</tr>';
-        $('.pixelcode_<?php echo $type; ?>_table tbody').append(row);
-        rowIndex<?php echo $type; ?>++;
-    });
+            $('.add_<?php echo $type; ?>_row').on('click', function() {
+                var row = '<tr>';
+                row += '<td><select name="_pixelcode_<?php echo $type; ?>_rows[' +
+                    rowIndex<?php echo $type; ?> +
+                    '][<?php echo $type; ?>]"><?php foreach ($options as $id => $title){ echo "<option value=\'$id\'>$title</option>"; } ?></select></td>';
 
-    $(document).on('click', '.remove_<?php echo $type; ?>_row', function() {
-        $(this).closest('tr').remove();
-    });
-});
-</script>
-<?php
+                row += '<td><input type="text" name="_pixelcode_<?php echo $type; ?>_rows[' +
+                    rowIndex<?php echo $type; ?> + '][price]" value="" /></td>';
+
+                row += '<td><button type="button" class="button remove_<?php echo $type; ?>_row">Remove</button></td>';
+                row += '</tr>';
+                $('.pixelcode_<?php echo $type; ?>_table tbody').append(row);
+                rowIndex<?php echo $type; ?>++;
+            });
+
+            $(document).on('click', '.remove_<?php echo $type; ?>_row', function() {
+                $(this).closest('tr').remove();
+            });
+        });
+        </script>
+        <?php
     }
 }
 
-// 3. Save all tabs
+
+// 3. Save all tabs with title & description from DB
 add_action( 'woocommerce_process_product_meta', 'pixelcode_save_all_rows' );
 function pixelcode_save_all_rows( $post_id ) {
-    $types = ['storage','carrier','condition'];
-    foreach ( $types as $type ) {
+    global $wpdb;
+
+    $tables = [
+        'storage'   => $wpdb->prefix . 'pixelcode_phone_storage',
+        'carrier'   => $wpdb->prefix . 'pixelcode_phone_carriers',
+        'condition' => $wpdb->prefix . 'pixelcode_phone_conditions',
+    ];
+
+    foreach ( $tables as $type => $table_name ) {
         $meta_key = "_pixelcode_{$type}_rows";
+
         if ( isset($_POST[$meta_key]) && is_array($_POST[$meta_key]) ) {
             $rows = [];
             foreach ( $_POST[$meta_key] as $row ) {
                 if ( ! empty($row[$type]) ) {
-                    $rows[] = [
-                        $type  => sanitize_text_field($row[$type]),
-                        'price'=> sanitize_text_field($row['price']),
+                    $item_id = absint($row[$type]);
+
+                    // get title (+ description only for condition) from DB
+                    if ( $type === 'condition' ) {
+                        $data_db = $wpdb->get_row( $wpdb->prepare(
+                            "SELECT title, description FROM $table_name WHERE id = %d",
+                            $item_id
+                        ));
+                        $title       = $data_db->title ?? '';
+                        $description = $data_db->description ?? '';
+                    } else {
+                        $title = $wpdb->get_var( $wpdb->prepare(
+                            "SELECT title FROM $table_name WHERE id = %d",
+                            $item_id
+                        ));
+                        $description = '';
+                    }
+
+                    $data = [
+                        $type        => $item_id,
+                        'title'      => sanitize_text_field($title),
+                        'price'      => sanitize_text_field($row['price'] ?? ''),
                     ];
+
+                    if ( $type === 'condition' ) {
+                        $data['description'] = sanitize_text_field($description);
+                    }
+
+                    $rows[] = $data;
                 }
             }
             update_post_meta( $post_id, $meta_key, $rows );

@@ -6,3 +6,27 @@
     font-weight: 600;
     margin-bottom: 20px;
 }
+
+/* Styling for uploaded images in order details */
+.order-images-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.order-image-item {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+}
+
+.order-image-item img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.order-image-item:hover {
+    border-color: #999;
+}

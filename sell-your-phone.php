@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Sell Your Phone
+ * Plugin Name: Buy Back
  * Plugin URI: 
  * Description: Easily create a phone resale system on your WordPress site. Allow users to submit device details, get instant quotes, and manage buyback requests seamlessly.
  * Version: 1.0.0

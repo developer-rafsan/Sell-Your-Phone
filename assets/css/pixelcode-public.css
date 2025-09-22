@@ -1,0 +1,209 @@
+.step {
+  display: none;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.step.active-step {
+  display: block;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+#single-page-step-form h1 {
+  font-size: 1.9rem;
+  font-weight: 500;
+}
+
+#single-page-step-form .line {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.096);
+  width: 100%;
+  margin-top: 15px;
+}
+
+#single-page-step-form p {
+  margin: 0;
+  line-height: 1;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+#single-page-step-form .help {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  color: orange;
+  cursor: pointer;
+  margin: 5px 0px;
+}
+
+#single-page-step-form .condition-option,
+#single-page-step-form .carrier-option,
+#single-page-step-form .storage-option,
+#single-page-step-form .included-option {
+  padding: 15px 20px;
+  box-shadow: 1px 1px 5px #11111127;
+  margin: 15px 0px;
+  border-radius: 8px;
+}
+
+#single-page-step-form .condition-option h6,
+#single-page-step-form .carrier-option h6,
+#single-page-step-form .storage-option h6,
+#single-page-step-form .included-option h6{
+  font-size: 1.2rem;
+  display: inline;
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+#single-page-step-form .condition-option p {
+  font-size: .9rem;
+  font-weight: 400;
+  color: #b1b1b1;
+  margin: 0;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+#single-page-step-form .condition-option:hover,
+#single-page-step-form .carrier-option:hover,
+#single-page-step-form .storage-option:hover,
+#single-page-step-form .included-option:hover {
+  transform: translateY(-5px);
+}
+
+#single-page-step-form .condition-option label,
+#single-page-step-form .carrier-option label,
+#single-page-step-form .storage-option label,
+#single-page-step-form .included-option label {
+  cursor: pointer;
+}
+
+#single-page-step-form .condition-option input,
+#single-page-step-form .carrier-option input,
+#single-page-step-form .storage-option input,
+#single-page-step-form .included-option input {
+  cursor: pointer;
+}
+
+#single-page-step-form .step-nav {
+  display: flex;
+  justify-content: right;
+  gap: 20px;
+  align-items: center;
+}
+
+#single-page-step-form .step-nav button{
+  padding: 12px 30px;
+  background: red;
+  font-weight: 600;
+  text-align: right;
+}
+
+#result-box {
+  padding: 30px;
+}
+
+#result-box .result-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#result-box .button-group {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 30px;
+}
+
+#result-box h2{
+  font-size: 1.9rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+#result-box .line {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.096);
+  width: 100%;
+  margin-top: 15px;
+}
+
+#result-box h3 {
+   color: orange;
+   margin: 50px 0px;
+   font-size: 1.8rem;
+}
+
+#result-box button {
+  text-transform: uppercase;
+  width: 100%;
+}
+
+#result-box button:first-child {
+  text-transform: uppercase;
+  width: 50%;
+  background: #dadada;
+  color: #111;
+}
+
+section.features .feature-item {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid #1111110a;
+}
+
+section.features .feature-item p{
+  margin: 0;
+  color: #11111157;
+}
+
+.upload-images-wrapper {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.upload-images-wrapper:hover {
+    border-color: #0073aa;
+}
+
+.upload-label {
+    display: block;
+    text-align: center;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+}
+
+.upload-label input[type="file"] {
+    display: none;
+}
+
+.upload-images-wrapper {
+  margin: 20px 0px;
+}
+
+.uploaded-preview {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.uploaded-preview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
