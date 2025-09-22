@@ -49,16 +49,6 @@ class Pixelcode_Admin {
             56
         );
 
-        // Reports submenu
-        add_submenu_page(
-            'pixelcode-buyback',
-            'Reports',
-            'Reports',
-            'manage_woocommerce',
-            'pixelcode-reports',
-            array( $this, 'render_reports_page' )
-        );
-
         // Condition submenu
         add_submenu_page(
             'pixelcode-buyback',
@@ -137,18 +127,6 @@ class Pixelcode_Admin {
             include $file;
         } else {
             echo '<div class="wrap"><h1>Storage</h1><p>Template file not found.</p></div>';
-        }
-    }
-
-    /**
-     * Reports page callback
-     */
-    public function render_reports_page() {
-        $file = plugin_dir_path( __FILE__ ) . '../templates/reports.php';
-        if ( file_exists( $file ) ) {
-            include $file;
-        } else {
-            echo '<div class="wrap"><h1>Reports</h1><p>Template file not found.</p></div>';
         }
     }
 }

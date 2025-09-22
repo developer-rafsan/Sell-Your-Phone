@@ -120,9 +120,6 @@ add_filter('woocommerce_get_item_data', function($item_data, $cart_item){
 
 
 
-
-
-
 // Override price
 add_action('woocommerce_before_calculate_totals', function($cart){
     foreach($cart->get_cart() as $cart_item){
@@ -131,6 +128,7 @@ add_action('woocommerce_before_calculate_totals', function($cart){
         }
     }
 });
+
 
 // Save images to order item meta
 add_action('woocommerce_checkout_create_order_line_item', function($item, $cart_item_key, $values, $order){
